@@ -32,18 +32,26 @@ export class HomeComponent implements OnInit {
     this.groceryService.getGroceryItems(this.searchTerm, this.selectedCategory)
       .subscribe({
         next: (items) => {
-          this.groceryItems = items;
+          this.groceryItems = items || [];
           this.loading = false;
         },
-        error: () => {
+        error: (error) => {
+          console.error('Error loading grocery items:', error);
+          this.groceryItems = [];
           this.loading = false;
         }
       });
   }
 
   loadCategories(): void {
-    this.groceryService.getCategories().subscribe(categories => {
-      this.categories = categories;
+    this.groceryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories || [];
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.categories = [];
+      }
     });
   }
 
