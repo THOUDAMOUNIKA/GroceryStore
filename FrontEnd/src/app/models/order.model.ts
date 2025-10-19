@@ -23,7 +23,9 @@ export interface CreateOrderRequest {
   paymentMethod: string;
 }
 
+import { GroceryItem } from './grocery-item.model';
+
 export interface CartItem {
-  groceryItem: any;
+  groceryItem: GroceryItem;
   quantity: number;
 }

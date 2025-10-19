@@ -18,8 +18,10 @@ export class CartService {
   }
 
   addToCart(item: GroceryItem, quantity: number = 1): void {
+    if (!item || !item.id) return;
+    
     const currentItems = this.cartItems.value;
-    const existingItem = currentItems.find(ci => ci.groceryItem.id === item.id);
+    const existingItem = currentItems.find(ci => ci.groceryItem?.id === item.id);
 
     if (existingItem) {
       existingItem.quantity += quantity;
@@ -31,13 +33,13 @@ export class CartService {
   }
 
   removeFromCart(itemId: number): void {
-    const currentItems = this.cartItems.value.filter(ci => ci.groceryItem.id !== itemId);
+    const currentItems = this.cartItems.value.filter(ci => ci.groceryItem?.id !== itemId);
     this.updateCart(currentItems);
   }
 
   updateQuantity(itemId: number, quantity: number): void {
     const currentItems = this.cartItems.value;
-    const item = currentItems.find(ci => ci.groceryItem.id === itemId);
+    const item = currentItems.find(ci => ci.groceryItem?.id === itemId);
     
     if (item) {
       if (quantity <= 0) {
