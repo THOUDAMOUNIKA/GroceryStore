@@ -8,7 +8,7 @@ COPY FrontEnd/package*.json ./FrontEnd/
 WORKDIR /src/FrontEnd
 RUN npm install
 COPY FrontEnd/ ./
-RUN npm run build
+RUN npm run build --configuration=production
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -21,4 +21,5 @@ RUN dotnet publish -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+RUN ls -la wwwroot/
 ENTRYPOINT ["dotnet", "GroceryStoreAPI.dll"]

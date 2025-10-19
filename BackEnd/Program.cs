@@ -90,6 +90,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Initialize database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<GroceryStoreContext>();
+    context.Database.EnsureCreated();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
