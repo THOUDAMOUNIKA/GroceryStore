@@ -7,7 +7,7 @@ import { GroceryItem } from '../models/grocery-item.model';
   providedIn: 'root'
 })
 export class GroceryService {
-  private apiUrl = 'http://localhost:5000/api/groceryitems';
+  private apiUrl = '/api/groceryitems';
 
   constructor(private http: HttpClient) { }
 
