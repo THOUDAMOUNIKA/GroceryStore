@@ -46,8 +46,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Database
-builder.Services.AddDbContext<GroceryStoreContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<GroceryStoreContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    builder.Services.AddDbContext<GroceryStoreContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // In-Memory Caching (for free deployment)
 builder.Services.AddMemoryCache();
