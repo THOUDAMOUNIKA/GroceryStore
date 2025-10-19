@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: grocerystore-fullstack
+    env: dotnet
+    buildCommand: |
+      cd FrontEnd
+      npm install
+      npm run build
+      cp -r dist/* ../BackEnd/wwwroot/
+      cd ../BackEnd
+      dotnet publish -c Release -o out
+    startCommand: dotnet out/GroceryStoreAPI.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:$PORT

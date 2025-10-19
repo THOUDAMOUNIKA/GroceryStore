@@ -1,0 +1,126 @@
+<div class="container mt-4">
+  <h2>Checkout</h2>
+  
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3" *ngFor="let item of cartItems">
+            <div class="col-md-2">
+              <img [src]="item.groceryItem.imageUrl" 
+                   [alt]="item.groceryItem.name" 
+                   class="img-fluid rounded"
+                   style="height: 60px; object-fit: cover;">
+            </div>
+            <div class="col-md-6">
+              <h6 class="mb-1">{{item.groceryItem.name}}</h6>
+              <small class="text-muted">{{item.groceryItem.description}}</small>
+            </div>
+            <div class="col-md-2">
+              <span>Qty: {{item.quantity}}</span>
+            </div>
+            <div class="col-md-2">
+              <span>${{(item.groceryItem.price * item.quantity) | number:'1.2-2'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Delivery & Payment</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="deliverySlot" class="form-label">Select Delivery Slot</label>
+              <select 
+                class="form-select" 
+                id="deliverySlot" 
+                formControlName="deliverySlot"
+                [class.is-invalid]="checkoutForm.get('deliverySlot')?.invalid && checkoutForm.get('deliverySlot')?.touched">
+                <option value="">Choose a delivery slot</option>
+                <option *ngFor="let slot of deliverySlots" [value]="slot.toISOString()">
+                  {{formatDate(slot)}}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="checkoutForm.get('deliverySlot')?.invalid && checkoutForm.get('deliverySlot')?.touched">
+                Please select a delivery slot.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Payment Method</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="credit-card" id="creditCard" formControlName="paymentMethod">
+                <label class="form-check-label" for="creditCard">
+                  <i class="fas fa-credit-card me-2"></i>Credit Card
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="debit-card" id="debitCard" formControlName="paymentMethod">
+                <label class="form-check-label" for="debitCard">
+                  <i class="fas fa-credit-card me-2"></i>Debit Card
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="paypal" id="paypal" formControlName="paymentMethod">
+                <label class="form-check-label" for="paypal">
+                  <i class="fab fa-paypal me-2"></i>PayPal
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="cash-on-delivery" id="cod" formControlName="paymentMethod">
+                <label class="form-check-label" for="cod">
+                  <i class="fas fa-money-bill-wave me-2"></i>Cash on Delivery
+                </label>
+              </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="error">
+              {{error}}
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-success w-100" 
+              [disabled]="loading || checkoutForm.invalid">
+              <span class="spinner-border spinner-border-sm me-2" *ngIf="loading"></span>
+              Place Order
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span>${{(total - 5) | number:'1.2-2'}}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Delivery Fee:</span>
+            <span>$5.00</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <strong>Total:</strong>
+            <strong>${{total | number:'1.2-2'}}</strong>
+          </div>
+          <small class="text-muted">
+            <i class="fas fa-shield-alt me-1"></i>
+            Your payment information is secure and encrypted.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="container mt-4">
+  <h2>My Orders</h2>
+
+  <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
+    {{successMessage}}
+    <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="text-center" *ngIf="loading">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- No Orders -->
+  <div *ngIf="!loading && orders.length === 0" class="text-center mt-5">
+    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+    <h4>No orders found</h4>
+    <p class="text-muted">You haven't placed any orders yet.</p>
+    <a routerLink="/" class="btn btn-success">Start Shopping</a>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngIf="!loading && orders.length > 0">
+    <div class="card mb-4" *ngFor="let order of orders">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <strong>Order #{{order.id}}</strong>
+          </div>
+          <div class="col-md-3">
+            <span class="badge" [class]="getStatusBadgeClass(order.status)">
+              {{order.status}}
+            </span>
+          </div>
+          <div class="col-md-3">
+            <span class="badge" [class]="getPaymentStatusBadgeClass(order.paymentStatus)">
+              {{order.paymentStatus}}
+            </span>
+          </div>
+          <div class="col-md-3 text-end">
+            <strong>${{order.totalAmount | number:'1.2-2'}}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <small class="text-muted">Order Date:</small><br>
+            <span>{{order.createdAt | date:'medium'}}</span>
+          </div>
+          <div class="col-md-6">
+            <small class="text-muted">Delivery Slot:</small><br>
+            <span>{{order.deliverySlot | date:'medium'}}</span>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <small class="text-muted">Payment Method:</small><br>
+            <span class="text-capitalize">{{order.paymentMethod.replace('-', ' ')}}</span>
+          </div>
+        </div>
+
+        <h6>Order Items:</h6>
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.items">
+                <td>{{item.itemName}}</td>
+                <td>{{item.quantity}}</td>
+                <td>${{item.price | number:'1.2-2'}}</td>
+                <td>${{item.total | number:'1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
