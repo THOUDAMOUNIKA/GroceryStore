@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using GroceryStoreAPI.Data;
 using GroceryStoreAPI.Models;
 using GroceryStoreAPI.DTOs;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GroceryStoreAPI.Controllers
 {
@@ -12,10 +12,10 @@ namespace GroceryStoreAPI.Controllers
     public class GroceryItemsController : ControllerBase
     {
         private readonly GroceryStoreContext _context;
-        private readonly IDistributedCache _cache;
+        private readonly IMemoryCache _cache;
         private readonly ILogger<GroceryItemsController> _logger;
 
-        public GroceryItemsController(GroceryStoreContext context, IDistributedCache cache, ILogger<GroceryItemsController> logger)
+        public GroceryItemsController(GroceryStoreContext context, IMemoryCache cache, ILogger<GroceryItemsController> logger)
         {
             _context = context;
             _cache = cache;
